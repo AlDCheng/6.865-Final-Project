@@ -154,7 +154,7 @@ vector<Vec2f> LK_Pyr(const Image &im1, const Image &im2, vector<Vec2f> points,
 	}
 
 	for (unsigned n = 0; n < points.size(); n++) {
-		cout << n+1 << " of " << points.size() << endl;
+		// cout << n+1 << " of " << points.size() << endl;
 		Vec2f u = points[n];
 		Vec2f g;
 		g << 0, 0;

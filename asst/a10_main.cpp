@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 #include "a10.h"
 #include "basicImageManipulation.h"
@@ -205,26 +206,46 @@ void Align_Tum_Harris_Tiles() {
     aligned.write("./Output/align_tum_harris_tiles.png");
 }
 
-
-
-void Align_Harris() {
-	// Image im1 = Image("./Input/green/noise-small-1.png");
-	// Image im2 = Image("./Input/green/noise-small-2.png");
-
-	// Image im1 = Image("./Input/tum/xyz_shift_1.png");
-	// Image im2 = Image("./Input/tum/xyz_shift_2.png");
-
-    // Image im1 = Image("./Input/test/source_1.png");
-    // Image im2 = Image("./Input/test/source_2.png");
-
-    Image im1 = Image("./Input/test/pru.png");
-    Image im2 = Image("./Input/test/pru3.png");
-
-    // Image im1 = Image("./Input/alignment/align1.png");
-    // Image im2 = Image("./Input/alignment/align4.png");
+void Align_Sharks_Harris() {
+    Image im1("./Input/new_photos/sharks-1.png");
+    Image im2("./Input/new_photos/sharks-2.png");
 
     Image aligned = Align_LK_Harris(im1, im2, 4, "median");
-    aligned.debug_write();
+    aligned.write("./Output/align_sharks_harris.png");
+}
+
+void Align_Sharks_Harris_Fast() {
+    Image im1("./Input/new_photos/sharks-1.png");
+    Image im2("./Input/new_photos/sharks-2.png");
+
+    Image aligned = Align_LK_Harris(im1, im2, 4, "median", 
+                                    31, 0.001, 100, true);
+    aligned.write("./Output/align_sharks_harris_fast.png");
+}
+
+void Align_Sharks_Harris_Tiles() {
+    Image im1("./Input/new_photos/sharks-1.png");
+    Image im2("./Input/new_photos/sharks-2.png");
+
+    clock_t start = clock();
+    Image aligned = Align_LK_Harris(im1, im2, 4, "overlay");
+    clock_t end = clock();
+    double duration = (end-start)*1.0f/CLOCKS_PER_SEC;
+    cout << "LK Align w/ Gaussian took: " << duration <<"s" << endl;
+    aligned.write("./Output/align_sharks_harris_tiles.png");
+}
+
+void Align_Sharks_Harris_Tiles_Fast() {
+    Image im1("./Input/new_photos/sharks-1.png");
+    Image im2("./Input/new_photos/sharks-2.png");
+
+    clock_t start = clock();
+    Image aligned = Align_LK_Harris(im1, im2, 4, "overlay", 
+                                    31, 0.001, 100, true);
+    clock_t end = clock();
+    double duration = (end-start)*1.0f/CLOCKS_PER_SEC;
+    cout << "LK Align Fast took: " << duration <<"s" << endl;
+    aligned.write("./Output/align_sharks_harris_tiles_fast.png");
 }
 
 int main()
@@ -244,11 +265,13 @@ int main()
     // Align_Green_Harris();
     // Align_Green_Harris_Tiles();
 
-    Align_Tum_Tile();
-    Align_Tum_Harris();
-    Align_Tum_Harris_Tiles();
+    // Align_Tum_Tile();
+    // Align_Tum_Harris();
+    // Align_Tum_Harris_Tiles();
 
-    // Align_Test();
-    // Align_Harris();
+    // Align_Sharks_Harris();
+    // Align_Sharks_Harris_Fast();
+    Align_Sharks_Harris_Tiles();
+    Align_Sharks_Harris_Tiles_Fast();
     return EXIT_SUCCESS;
 }
